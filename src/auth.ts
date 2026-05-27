@@ -23,21 +23,8 @@ export const signAuthToken = (user: AppUser) =>
     { expiresIn: "7d" }
   );
 
-export const setAuthCookie = (res: Response, token: string) => {
-  res.cookie(config.cookieName, token, {
-    httpOnly: true,
-    sameSite: config.isProduction ? "none" : "lax",
-    secure: config.isProduction,
-    maxAge: 7 * 24 * 60 * 60 * 1000
-  });
-};
-
 export const clearAuthCookie = (res: Response) => {
-  res.clearCookie(config.cookieName, {
-    httpOnly: true,
-    sameSite: config.isProduction ? "none" : "lax",
-    secure: config.isProduction
-  });
+  res.clearCookie(config.cookieName);
 };
 
 export const verifyToken = (token: string): AuthToken =>
@@ -57,9 +44,15 @@ export const getUserFromToken = async (token?: string) => {
   return data;
 };
 
+const extractToken = (req: Request): string | undefined => {
+  const auth = req.headers.authorization;
+  if (auth?.startsWith("Bearer ")) return auth.slice(7);
+  return req.cookies?.[config.cookieName];
+};
+
 export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = await getUserFromToken(req.cookies?.[config.cookieName]);
+    const user = await getUserFromToken(extractToken(req));
     if (!user) {
       res.status(401).json({ error: "Not authenticated" });
       return;

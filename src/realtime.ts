@@ -23,8 +23,10 @@ export const attachRealtimeServer = (server: HttpServer) => {
 
   io.use(async (socket, next) => {
     try {
+      const bearerToken = socket.handshake.auth?.token as string | undefined;
       const cookies = parseCookies(socket.handshake.headers.cookie);
-      const user = await getUserFromToken(cookies[config.cookieName]);
+      const token = bearerToken ?? cookies[config.cookieName];
+      const user = await getUserFromToken(token);
       if (!user) {
         next(new Error("Unauthorized"));
         return;

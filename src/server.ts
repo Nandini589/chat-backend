@@ -133,8 +133,7 @@ app.get(
   },
   (req, res) => {
     const token = signAuthToken(req.user as User);
-    setAuthCookie(res, token);
-    res.redirect(`${config.frontendUrl}/chat`);
+    res.redirect(`${config.frontendUrl}/chat?token=${token}`);
   }
 );
 
