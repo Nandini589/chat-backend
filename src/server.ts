@@ -4,7 +4,7 @@ import express from "express";
 import http from "http";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { setAuthCookie, signAuthToken } from "./auth.js";
+import { signAuthToken } from "./auth.js";
 import { config } from "./config.js";
 import apiRouter, { ensureGeneralMembership, setRealtimeServer } from "./routes.js";
 import { supabase } from "./supabase.js";
