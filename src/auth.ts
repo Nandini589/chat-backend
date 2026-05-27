@@ -23,13 +23,11 @@ export const signAuthToken = (user: AppUser) =>
     { expiresIn: "7d" }
   );
 
-const isProduction = process.env.NODE_ENV === "production";
-
 export const setAuthCookie = (res: Response, token: string) => {
   res.cookie(config.cookieName, token, {
     httpOnly: true,
-    sameSite: isProduction ? "none" : "lax",
-    secure: isProduction,
+    sameSite: config.isProduction ? "none" : "lax",
+    secure: config.isProduction,
     maxAge: 7 * 24 * 60 * 60 * 1000
   });
 };
@@ -37,8 +35,8 @@ export const setAuthCookie = (res: Response, token: string) => {
 export const clearAuthCookie = (res: Response) => {
   res.clearCookie(config.cookieName, {
     httpOnly: true,
-    sameSite: isProduction ? "none" : "lax",
-    secure: isProduction
+    sameSite: config.isProduction ? "none" : "lax",
+    secure: config.isProduction
   });
 };
 
