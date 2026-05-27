@@ -11,6 +11,7 @@ const required = (name: string) => {
 export const config = {
   port: Number(process.env.PORT ?? 4000),
   frontendUrl: process.env.FRONTEND_URL ?? "http://localhost:3000",
+  isProduction: (process.env.FRONTEND_URL ?? "").startsWith("https://"),
   supabaseUrl: required("SUPABASE_URL"),
   supabaseServiceRoleKey: required("SUPABASE_SERVICE_ROLE_KEY"),
   googleClientId: required("GOOGLE_CLIENT_ID"),
